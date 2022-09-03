@@ -2,6 +2,9 @@ from django.shortcuts import render, reverse
 
 
 def home_view(request):
+    """
+    Обработчик "Домашней страницы.
+    """
     template_name = "calculator/home.html"
 
     pages = {
@@ -34,6 +37,15 @@ DATA = {
 
 
 def omlet(request):
+    """
+    Обработчик ответа при нажатии на "Рецепт омлета".
+    Проверяет наличие необезательного параметра в url запросе "servings" (по умолчанию = 1).
+    В случае наличия параметра, с помощью request.GET.get забирает значение по ключу 'servings'
+    и присваивает в соответствующую переменную.
+    Возвращеет render в который передает request, html-шаблон и context.
+    Context представляет собой словарь и рецептом омлета: ингредиенты: кол-во (значение из DATA умноженное на переменную 'servings')
+    
+    """
     servings = int(request.GET.get('servings', 1))
     print()
     print(f'количество блюд = {servings}')
@@ -49,6 +61,10 @@ def omlet(request):
 
 
 def pasta(request):
+    """
+    Обработчик ответа при нажатии на "Рецепт пасты".
+    Логика обработчика аналогична def omlet(request)
+    """
     servings = int(request.GET.get('servings', 1))
     print()
     print(f'количество блюд = {servings}')
@@ -64,6 +80,10 @@ def pasta(request):
 
 
 def buter(request):
+    """
+    Обработчик ответа при нажатии на "Рецепт бутерброда".
+    Логика обработчика аналогична def omlet(request)
+    """
     servings = int(request.GET.get('servings', 1))
     print()
     print(f'количество блюд = {servings}')
