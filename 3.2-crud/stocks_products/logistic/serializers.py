@@ -51,6 +51,10 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().update(instance, validated_data)
 
         for position in positions:
-            StockProduct.objects.update_or_create(stock=stock, **position) #пробуем через распаковку массива
+            StockProduct.objects.update_or_create(
+                stock = stock, 
+                product = position['product'], 
+                defaults = {'price': position['price'], 'quantity':position['quantity']}, # параметр defaults для избегания задвоения данных при PATCH запросе
+                )
 
         return stock
