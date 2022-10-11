@@ -28,12 +28,12 @@ def test_course(client):
     """
     тест успешного получения курса "GET" запросом
     """
-    Course.objects.create(name='python')
+    course=Course.objects.create(name='python')
     response = client.get('/api/v1/courses/')
     
     assert response.status_code == 200
     data = response.json()
-    assert data[0]['name'] == 'python'
+    assert data[0]['name'] == course.name
     
 @pytest.mark.django_db
 def test_course_create(client):
@@ -55,8 +55,8 @@ def test_course_delete(client):
     """
     тест успешного удаления курса
     """
-    Course.objects.create(id=1, name='python')      # Создаем курс "python"
-    response = client.delete('/api/v1/courses/1/')
+    course=Course.objects.create(id=1, name='python')      # Создаем курс "python"
+    response = client.delete(f'/api/v1/courses/{course.id}/')  # Удаляем курс
     
     assert response.status_code == 204
     
@@ -68,9 +68,8 @@ def test_course_patch(client):
     course=Course.objects.create(name='python')    # Создаем курс "python"
     response = client.patch(f'/api/v1/courses/{course.id}/', data={'name': 'java'})  # Меняем на "java" patch запросом
     assert response.status_code == 200
-    resp = client.get('/api/v1/courses/') # Делаем запрос курсов
-    data = resp.json()
-    assert data[0]['name'] == 'java'  # Проверяем возвращается ли нам именно 'java', a не изнаальный 'python'
+    data = response.json()
+    assert data['name'] == 'java'  # Проверяем возвращается ли нам именно 'java', a не изначальный 'python'
 
 @pytest.mark.django_db
 def test_courses_get(client, courses_factory):
